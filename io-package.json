@@ -1,0 +1,45 @@
+{
+    "common": {
+        "name":                     "nest",
+        "version":                  "0.0.1",
+	    "news": {
+			"0.0.1": {
+			  "en": "initial adapter",
+			  "de": "Initiale Version",
+			  "ru": "Первоначальный адаптер"
+			}
+		},
+        "title":                    "nest adapter",
+        "desc":                     {
+				 "en": "ioBroker nest Adapter",
+				 "de": "ioBroker Nest Adapter",
+				 "ru": "ioBroker Nest драйвер как образец"
+		},
+        "platform":                 "Javascript/Node.js",
+        "mode":                     "daemon",
+        "icon":                     "nest.png",
+        "enabled":                  true,
+		"extIcon":                  "https://raw.githubusercontent.com/foxthefox/ioBroker.nest/master/admin/nest.png",
+		"keywords":                 ["nest", "openenergy"],
+        "readme":                   "https://github.com/foxthefox/ioBroker.nest/blob/master/README.md",
+		"loglevel":                 "info",
+        "type":                     "common adapters"
+    },
+    "native": {
+        "emonweb": "www.nest.org",
+        "emonwriteapikey": "1234567FFaa",
+        "estates": [
+                {
+                    "emonname": "hkv_wz1",
+                    "iobrokerstate": "hkv.0.radiator_1.countNorm"
+                },
+                {
+                    "emonname": "hkv_wz2",
+                    "iobrokerstate": "hkv.0.radiator_2.countNorm"
+                }
+            ]
+        },
+    "objects": [
+
+    ]
+}
