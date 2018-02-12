@@ -30,13 +30,11 @@
 <!-- you have to define 2 functions in the global scope: -->
 <script type="text/javascript">
 
-    var estates = [];
+    var devices = [];
 
     // Dictionary (systemDictionary is global variable from adapter-settings.js)
     systemDictionary = {
         "nest adapter settings": {"de": "nest adapter setting", "en": "nest adapter setting", "ru": "nest adapter setting"},
-        "test1":                    {"en": "Test 1", "de": "Test 1", "ru": "Тест 1"},
-        "test2":                    {"en": "Test 2", "de": "Test 2", "ru": "Тест 2"},
         "on save adapter restarts with new config immediately": {
             "de": "Beim Speichern von Einstellungen der Adapter wird sofort neu gestartet.",
             "en": "on save adapter restarts with new config immediately",
@@ -80,13 +78,13 @@
 
         if (!settings) return;
 
-        states = settings.states || [];
+        devices = settings.devices || [];
 
         for (var key in settings) {
             setValue(key, settings[key], onChange);
         }
 
-        editTable('estates', ['emonname', 'iobrokerstate'], estates, 570);
+        editTable('devices', ['id', 'name','type'], devices, 570);
 
         // Signal to admin, that no changes yet
         onChange(false);
@@ -106,7 +104,7 @@
             }
         });
         // Get edited table
-        obj.radiators = getTableResult('estates', ['emonname', 'iobrokerstate']);
+        obj.devices = getTableResult('devices', ['id', 'name', 'type']);
 
         callback(obj);
     }
@@ -121,12 +119,12 @@
     </tr></table>
     <table>
         <tr>
-            <td><label class="translate" for="emonweb">EMONCMS web address</label></td>
-            <td><input type="text" id="emonweb" class="value"/></td>
+            <td><label class="translate" for="nestweb">NEST web address</label></td>
+            <td><input type="text" id="nestweb" class="value"/></td>
         </tr>
         <tr>
-            <td><label class="translate" for="emonwriteapikey">EMONCMS write API_KEY</label></td>
-            <td><input type="text" id="emonwriteapikey" class="value"/></td>
+            <td><label class="translate" for="access_token">NEST access_token</label></td>
+            <td><input type="text" id="access_token" class="value"/></td>
             </td>
         </tr>
     </table>
@@ -135,8 +133,8 @@
     <h4 class="translate">state to nest variable configuration</h4>
     <p class="translate">what to configure:</p>
     <p> name in nest and full state name in iobroker</p> 
-    <table id="estates"></table>
-    <div id="pager-estates"></div>
+    <table id="devices"></table>
+    <div id="pager-devices"></div>
 
 </div>
 
