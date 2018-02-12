@@ -26,17 +26,24 @@
         "type":                     "common adapters"
     },
     "native": {
-        "emonweb": "www.nest.org",
-        "emonwriteapikey": "1234567FFaa",
-        "estates": [
+        "nestweb": "www.nest.org",
+        "access_token": "1234567FFaa",
+        "devices": [
                 {
-                    "emonname": "hkv_wz1",
-                    "iobrokerstate": "hkv.0.radiator_1.countNorm"
+                    "id": "peyiJNo0IldT2YlIVtYaGQ",
+                    "name": "Themostat",
+                    "type": "theomostats"
                 },
                 {
-                    "emonname": "hkv_wz2",
-                    "iobrokerstate": "hkv.0.radiator_2.countNorm"
-                }
+                    "id": "RTMTKxsQTCxzVcsySOHPxKoF4OyCifrs",
+                    "name": "Rauchmelder",
+                    "type": "smoke_co_alarms"
+                },
+                {
+                    "id": "awJo6rH",
+                    "name": "Kamera",
+                    "type": "cameras"
+                }                
             ]
         },
     "objects": [
