@@ -172,6 +172,4 @@ function main() {
 
     }
 
-    adapter.log.debug('typeobjects ' + JSON.stringify(typeobjects));
-
 }
