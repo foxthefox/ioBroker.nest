@@ -2,10 +2,18 @@
 /*jslint node: true */
 'use strict';
 
+// you have to require the utils module and call adapter function
 var utils         = require(__dirname + '/lib/utils'); // Get common adapter utils
 var stateObjects = require(__dirname + '/lib/objects');
 var nest         = null; //communication handler
 
+// you have to call the adapter function and pass a options object
+// name has to be set and has to be equal to adapters folder name and main file name excluding extension
+// adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.nest.0
+var adapter = utils.adapter('nest');
+
+var types = [];
+var typeobjects = {};
 
 var nameObjects = {
     thermostats :{
@@ -117,7 +125,7 @@ function defineObject(type, id, name){
         adapter.setObject(adapter.namespace + '.' + type + '.' + id + '.' + objects[s], obj);
     }
 
-    // states for the temporary values
+    // states for the state values
     var objects= nameObjectType["state"];
     for (var s = 0; s < objects.length; s++) {
         if (!stateObjects[objects[s]]) {
@@ -133,13 +141,46 @@ function defineObject(type, id, name){
         adapter.setObject(adapter.namespace + '.' + type + '.' + id + '.' + objects[s], obj);
     }
 
-    // und nochmal
-    if(type === 'thermostats'){}
-    // imperial
-    // metric
-    if(type === 'cameras'){}
-    // laststate
+    // states for the thermostat values
+    if(type === 'thermostats'){
+        // imperial
 
+        // metric
+        var objects= nameObjectType["metric"];
+        for (var s = 0; s < objects.length; s++) {
+            if (!stateObjects[objects[s]]) {
+                adapter.log.error('State ' + objects[s] + ' unknown');
+                continue;
+            }
+            var obj = JSON.parse(JSON.stringify(stateObjects[objects[s]]));
+            if (!obj) {
+                adapter.log.error('Unknown state: ' + objects[s]);
+                continue;
+            }
+            adapter.log.debug('obj anlegen  '+ JSON.stringify(obj));
+            adapter.setObject(adapter.namespace + '.' + type + '.' + id + '.' + objects[s], obj);
+        }
+    }
+
+
+    //states for the camera values
+    if(type === 'cameras'){
+        // laststate
+        var objects= nameObjectType["last_state"];
+        for (var s = 0; s < objects.length; s++) {
+            if (!stateObjects[objects[s]]) {
+                adapter.log.error('State ' + objects[s] + ' unknown');
+                continue;
+            }
+            var obj = JSON.parse(JSON.stringify(stateObjects[objects[s]]));
+            if (!obj) {
+                adapter.log.error('Unknown state: ' + objects[s]);
+                continue;
+            }
+            adapter.log.debug('obj anlegen  '+ JSON.stringify(obj));
+            adapter.setObject(adapter.namespace + '.' + type + '.' + id + '.' + objects[s], obj);
+        }
+    }
 }
 
 function main() { 
@@ -151,25 +192,70 @@ function main() {
         return;
     }
 
+    typeobjects["thermostats"]=[];
+    typeobjects["smoke_co_alarms"]=[];
+    typeobjects["cameras"]=[];
+
+
     for (var anz in obj){
-        var logobject = obj[anz].logobject;
-        var logname = obj[anz].logname;
+        var nestobject = obj[anz].id;
+        var nestname = obj[anz].name;
+        var nesttype = obj[anz].type;
 
-        adapter.log.debug('werte ' + logobject +' named ' + logname);
+        adapter.log.debug('werte ' + nestobject +' named ' + name);
 
-
-            defineObject( "avg" , logobject, logname); //type, id, name
-            adapter.subscribeForeignStates(logobject);
-            adapter.setObject(adapter.namespace + '.save.avg', {
+        //thermostats anlegen
+        if( type  === 'thermostats' ){
+            typeobjects["thermostats"].push(nestobject);
+            defineObject( nesttype , nestobject, nestname); //type, id, name
+            /*
+            adapter.setObject(adapter.namespace + '.thermostat', {
                 type: 'channel',
                 common: {
-                    name: 'Mittelwerte',
+                    name: 'theromostat',
                     role: 'sensor'
                 },
                 native: {
                 }
             });
+            */
+        }
 
+        // smoke alarm anlegen
+        if(type === 'smoke_co_alarms' ){
+            typeobjects["smoke_co_alarms"].push(nestobject);
+            defineObject( nesttype , nestobject, nestname); //type, id, name
+            /*
+            adapter.setObject(adapter.namespace + '.smoke', {
+                type: 'channel',
+                common: {
+                    name: 'smoke alarm',
+                    role: 'sensor'
+                },
+                native: {
+                }
+            });
+            */
+        }   
+
+        //camera anlegen     
+        if( type === 'cameras' ){
+            typeobjects["cameras"].push(nestobject);
+            defineObject( nesttype , nestobject, nestname); //type, id, name
+            /*
+            adapter.setObject(adapter.namespace + '.cameras', {
+                type: 'channel',
+                common: {
+                    name: 'camera',
+                    role: 'sensor'
+                },
+                native: {
+                }
+            });
+            */
+        }
     }
+
+    adapter.log.debug('typeobjects ' + JSON.stringify(typeobjects));
 
 }
