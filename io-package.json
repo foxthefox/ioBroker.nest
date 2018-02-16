@@ -19,10 +19,10 @@
         "mode":                     "daemon",
         "icon":                     "nest.png",
         "enabled":                  true,
-		"extIcon":                  "https://raw.githubusercontent.com/foxthefox/ioBroker.nest/master/admin/nest.png",
-		"keywords":                 ["nest", "openenergy"],
+	"extIcon":                  "https://raw.githubusercontent.com/foxthefox/ioBroker.nest/master/admin/nest.png",
+	"keywords":                 ["nest"],
         "readme":                   "https://github.com/foxthefox/ioBroker.nest/blob/master/README.md",
-		"loglevel":                 "info",
+	"loglevel":                 "debug",
         "type":                     "common adapters"
     },
     "native": {
