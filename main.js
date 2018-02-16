@@ -202,10 +202,10 @@ function main() {
         var nestname = obj[anz].name;
         var nesttype = obj[anz].type;
 
-        adapter.log.debug('werte ' + nestobject +' named ' + name);
+        adapter.log.debug('id' + nestobject +' named ' + nestname);
 
         //thermostats anlegen
-        if( type  === 'thermostats' ){
+        if( nesttype  === 'thermostats' ){
             typeobjects["thermostats"].push(nestobject);
             defineObject( nesttype , nestobject, nestname); //type, id, name
             /*
@@ -222,7 +222,7 @@ function main() {
         }
 
         // smoke alarm anlegen
-        if(type === 'smoke_co_alarms' ){
+        if(nesttype === 'smoke_co_alarms' ){
             typeobjects["smoke_co_alarms"].push(nestobject);
             defineObject( nesttype , nestobject, nestname); //type, id, name
             /*
@@ -239,7 +239,7 @@ function main() {
         }   
 
         //camera anlegen     
-        if( type === 'cameras' ){
+        if( nesttype === 'cameras' ){
             typeobjects["cameras"].push(nestobject);
             defineObject( nesttype , nestobject, nestname); //type, id, name
             /*
