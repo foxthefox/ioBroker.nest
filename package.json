@@ -25,7 +25,8 @@
     "url": "git+https://github.com/foxthefox/ioBroker.nest.git"
   },
   "dependencies": {
-    "needle": "^2.1.2"
+    "request": "^2.83.0",
+    "eventsource":"^1.0.5"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
