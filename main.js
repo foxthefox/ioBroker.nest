@@ -5,7 +5,9 @@
 // you have to require the utils module and call adapter function
 var utils         = require(__dirname + '/lib/utils'); // Get common adapter utils
 var stateObjects = require(__dirname + '/lib/objects');
-var nest         = null; //communication handler
+var request = require('request'); // event driven communication
+const EventSource = require('eventsource'); // streamed communication
+
 
 // you have to call the adapter function and pass a options object
 // name has to be set and has to be equal to adapters folder name and main file name excluding extension
@@ -14,6 +16,8 @@ var adapter = utils.adapter('nest');
 
 var types = [];
 var typeobjects = {};
+
+
 
 var nameObjects = {
     thermostats :{
@@ -37,7 +41,7 @@ var nameObjects = {
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', function (callback) {
-    if (statisticTimeout) clearTimeout(statisticTimeout);
+    if (nestTimeout) clearTimeout(nestTimeout);
     try {
         adapter.log.info('cleaned everything up...');
         callback();
@@ -45,18 +49,6 @@ adapter.on('unload', function (callback) {
         callback();
     }
     // evtl. auch noch ein paar schedules löschen
-});
-
-
-var adapter       = utils.adapter({
-    name: 'nest',
-    unload: function (cb) {
-        if (nest) {
-            nest.close();
-            nest = null;
-        }
-        if (typeof cb === 'function') cb();
-    }
 });
 
 adapter.on('message', function (obj) {
@@ -95,7 +87,7 @@ adapter.on('ready', function () {
 
 function defineObject(type, id, name){
     //Überschrift
-    adapter.log.info('statistics setting up object = ' + type + '  ' + id);
+    adapter.log.info('nest setting up object = ' + type + '  ' + id);
     adapter.setObject(adapter.namespace + '.' + type + '.' + id, {
         type: 'channel',
         common: {
@@ -183,8 +175,91 @@ function defineObject(type, id, name){
     }
 }
 
+function updateDevices(object){
+    var list = object;
+    var types = Object.keys(list.devices);
+    for (var i in types){
+        adapter.log.debug('types ' + types[i]);
+        var typeids = Object.keys(list.devices[types[i]]); //muß ohne . sein types[i], steht für .thermostats, .cameras .smoke_co_alarms
+        adapter.log.debug("typeids " + typeids);
+        for (var j in typeids){
+            adapter.log.debug('id ' + typeids[j]);
+            adapter.log.debug('name '+ list.devices[types[i]][typeids[j]].where_name); //wieder ohne ., hier stehen die kryptischen Ids
+            var objectdata = Object.keys(list.devices[types[i]][typeids[j]]);
+            for (var k in objectdata){
+                //if (nameObjects[types[i]].hasOwnproperty(objectdata[k])){
+                    adapter.log.debug('value set ' + types[i] + '.' + typeids[j] + '.' + objectdata[k] + ' wert ' + list.devices[types[i]][typeids[j]][objectdata[k]] );
+                    adapter.setState(adapter.namespace + '.' + types[i] + '.' + typeids[j] + '.' + objectdata[k], {val: list.devices[types[i]][typeids[j]][objectdata[k]], ack: true});
+                //}
+            }
+
+        }
+    }
+}
+
+
+function getUpdate(accesstoken){
+    adapter.log.debug('initial data request ' + accesstoken);
+    var nesturl = 'https://developer-api.nest.com';
+    var nesturl2 = nesturl + '?auth=' + accesstoken;
+
+    var options = {
+        headers: { 'Content-Type': 'application/json' ,'Authorization': 'Bearer ' + accesstoken }
+    }
+
+    request(nesturl, options, function(err, resp, body) {
+        adapter.log.debug('status' +resp.statusCode + '  ' +resp.statusMessage);
+        adapter.log.debug('body ' + body);
+        if (resp.statusCode == 200) {
+            adapter.log.debug(body);
+            var list = JSON.parse(body);
+            updateDevices(list);
+        }
+        else {
+            adapter.log.debug('error ' +err + resp );
+        }
+    });
+}
+
+
+function startStreaming(token) {
+    const NEST_API_URL = 'https://developer-api.nest.com';
+    
+    var headers = {
+        "Authorization": 'Bearer ' + token
+    }
+    var source = new EventSource(NEST_API_URL, {"headers": headers});
+
+    source.addEventListener('put', function(event) {
+        adapter.log.debug('\n' + event.data); // Nest data in JSON format
+        adapter.log.debug('device'+JSON.stringify(JSON.parse(event.data).data));
+        var stream = JSON.parse(event.data)
+        if(stream.data){
+            updateDevices(stream.data);
+        }
+        
+    });
+
+    source.addEventListener('open', function(event) {
+        adapter.log.debug('Connection opened!');
+    });
+
+    source.addEventListener('auth_revoked', function(event) {
+        adapter.log.debug('Authentication token was revoked.');
+        // Re-authenticate your user here.
+    });
+
+    source.addEventListener('error', function(event) {
+        if (event.readyState == EventSource.CLOSED) {
+            adapter.log.error('Connection was closed!', event);
+        } else {
+            adapter.log.error('An unknown error occurred: ', event);
+        }
+    }, false);
+}
+
 function main() { 
-    // objects with statistics
+    // objects with nest
     var obj = adapter.config.devices;
     adapter.log.debug('obj config ' + JSON.stringify(obj));
     if (!adapter.config.devices) {
@@ -196,13 +271,14 @@ function main() {
     typeobjects["smoke_co_alarms"]=[];
     typeobjects["cameras"]=[];
 
+    
 
     for (var anz in obj){
         var nestobject = obj[anz].id;
         var nestname = obj[anz].name;
         var nesttype = obj[anz].type;
 
-        adapter.log.debug('id' + nestobject +' named ' + nestname);
+        adapter.log.debug('werte ' + nestobject +' named ' + nestname);
 
         //thermostats anlegen
         if( nesttype  === 'thermostats' ){
@@ -255,6 +331,14 @@ function main() {
             */
         }
     }
+    
+    var token = adapter.config.access_token;
+
+    //initial setup
+    getUpdate(token);
+
+    //streamed data updates
+    startStreaming(token);
 
     adapter.log.debug('typeobjects ' + JSON.stringify(typeobjects));
 
