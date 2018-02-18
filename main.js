@@ -12,7 +12,7 @@ const EventSource = require('eventsource'); // streamed communication
 // you have to call the adapter function and pass a options object
 // name has to be set and has to be equal to adapters folder name and main file name excluding extension
 // adapter will be restarted automatically every time as the configuration changed, e.g system.adapter.nest.0
-var adapter = utils.adapter('nest');
+var adapter = utils.Adapter('nest');
 
 var types = [];
 var typeobjects = {};
