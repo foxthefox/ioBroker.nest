@@ -11,6 +11,7 @@ adapter for NEST devices like NEST-thermostat, NEST-protect, NEST-camera
 
 ## Installation:
 Installation requires nodejs v4 at minimum
+ioBroker admin v3 is needed
 
 from npm
 ```javascript
