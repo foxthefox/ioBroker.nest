@@ -1,6 +1,6 @@
 ![Logo](admin/nest.png)
 # ioBroker.nest
-=================
+
 [![NPM version](http://img.shields.io/npm/v/iobroker.nest.svg)](https://www.npmjs.com/package/iobroker.nest)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.nest.svg)](https://www.npmjs.com/package/iobroker.nest)
 [![Build Status](https://travis-ci.org/foxthefox/ioBroker.nest.svg?branch=master)](https://travis-ci.org/foxthefox/ioBroker.nest)
