@@ -25,7 +25,7 @@
         "mode":                     "daemon",
         "icon":                     "nest.png",
         "enabled":                  true,
-	"extIcon":                  "https://raw.githubusercontent.com/foxthefox/ioBroker.nest/master/admin/nest.png",
+	"extIcon":                  "https://raw.githubusercontent.com/foxthefox/ioBroker.nest/master/admin/nest_logo.gif",
 	"keywords":                 ["nest"],
 	"materialize":	 	    true,
         "readme":                   "https://github.com/foxthefox/ioBroker.nest/blob/master/README.md",
