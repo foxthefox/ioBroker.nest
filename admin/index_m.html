@@ -116,7 +116,8 @@
                         console.log('send post to nest');
 
                         var tokenurl = 'https://api.home.nest.com/oauth2/access_token';
-                        tokenurl = tokenurl+ '?client_id=' + client_id + '&client_secret=' + client_secret + '&grant_type=authorization_code' + '&code=' + pin;
+                        tokenurl = tokenurl+ '?client_id=' + product_id + '&client_secret=' + product_secret + '&grant_type=authorization_code' + '&code=' + product_pin;
+                        console.log("url " + tokenurl);
                         var xhttp = new XMLHttpRequest();
 
                         xhttp.onreadystatechange = function () {
