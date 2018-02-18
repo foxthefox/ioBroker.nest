@@ -3,11 +3,17 @@
         "name":                     "nest",
         "version":                  "0.0.1",
 	    "news": {
-			"0.0.1": {
-			  "en": "initial adapter",
-			  "de": "Initiale Version",
-			  "ru": "Первоначальный адаптер"
-			}
+		"0.0.1": {
+		    "en": "initial version",
+		    "de": "erste Version",
+		    "ru": "Первоначальная версия",
+		    "pt": "versão inicial",
+		    "nl": "eerste versie",
+		    "fr": "version initiale",
+		    "it": "versione iniziale",
+		    "es": "versión inicial",
+		    "pl": "początkowa wersja"
+		  }
 		},
         "title":                    "nest adapter",
         "desc":                     {
