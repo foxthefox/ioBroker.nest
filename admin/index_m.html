@@ -105,6 +105,36 @@
                     }
                 });
             }).attr('title', _('update adapter information'));
+            
+            $('#table-button-create').click(function () {
+                getIsAdapterAlive(function (isAlive) {
+                    if (isAlive) {
+                        console.log('send post to nest');
+
+                        var tokenurl = 'https://api.home.nest.com/oauth2/access_token';
+                        tokenurl = tokenurl+ '?client_id=' + client_id + '&client_secret=' + client_secret + '&grant_type=authorization_code' + '&code=' + pin;
+                        var xhttp = new XMLHttpRequest();
+
+                        xhttp.onreadystatechange = function () {
+                            if (this.readyState == 4 && this.status == 200) {
+                                var text = this.responseText;
+                                var list = JSON.parse(text);
+                                console.log(list);
+                                console.log(list.access_token);
+                                access_token = list.access_token;
+                                onChange();
+                                showMessage(access_token, 'copy the code to the page field');
+                            }
+                        }
+                        xhttp.open("POST", tokenurl, true);
+                        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        xhttp.send();
+                    } else {
+                    showMessage(_('Start or enable adapter first'));
+                    }
+                });
+            }).attr('title', _('get access_token'));
+            
             //delete buttons in tabelle
             var $div  = $('#values');
             var $table = $div.find('.table-values');
