@@ -1,6 +1,6 @@
 {
   "name": "iobroker.nest",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "ioBroker nest Adapter",
   "author": {
     "name": "foxthefox",
