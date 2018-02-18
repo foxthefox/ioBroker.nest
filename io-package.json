@@ -1,7 +1,7 @@
 {
     "common": {
         "name":                     "nest",
-        "version":                  "0.0.1",
+        "version":                  "0.0.2",
 	    "news": {
 		"0.0.1": {
 		    "en": "initial version",
@@ -39,23 +39,16 @@
 		]
     },
     "native": {
+	"client_id": "product_id",
+        "client_secret": "product_secret",
+        "pin":"code",
         "access_token": "your token",
         "devices": [
                 {
                     "id": "peyiJNo0IldT2YlIVtYaGQ",
                     "name": "Beispiel Themostat",
                     "type": "thermostats"
-                },
-                {
-                    "id": "RTMTKxsQTCxzVcsySOHPxKoF4OyCifrs",
-                    "name": "Beispiel Rauchmelder",
-                    "type": "smoke_co_alarms"
-                },
-                {
-                    "id": "awJo6rH",
-                    "name": "Beispiel Kamera",
-                    "type": "cameras"
-                }                
+                }              
             ]
         },
     "objects": [
