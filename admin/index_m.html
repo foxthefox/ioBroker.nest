@@ -108,7 +108,7 @@
                                         console.log('name ' + list.devices[types[i]][typeids[j]].where_name); //wieder ohne ., hier stehen die kryptischen Ids
                                         newdevices.push({ "id": typeids[j], "type": types[i], "name": list.devices[types[i]][typeids[j]].where_name });
                                         var isFound = false;
-                                        for (var k = 0; i < devices.length; k++) {
+                                        for (var k = 0; k < devices.length; k++) {
                                             if (devices[k].id === typeids[j]) {
                                                 isFound = true;
                                                 break;
