@@ -24,10 +24,16 @@
 	"materialize":	 	    true,
         "readme":                   "https://github.com/foxthefox/ioBroker.nest/blob/master/README.md",
 	"loglevel":                 "debug",
-        "type":                     "common adapters"
+        "type":                     "common adapters",
+	"authors": [
+            {
+                "name": "foxthefox",
+                "email": "foxthefox@wysiwis.net"
+            }
+		]
     },
     "native": {
-        "access_token": "1234567FFaa",
+        "access_token": "your token",
         "devices": [
                 {
                     "id": "peyiJNo0IldT2YlIVtYaGQ",
