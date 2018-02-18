@@ -16,40 +16,6 @@
     <script type="text/javascript">
        var devices = [];
 
-       function getDevices(accesstoken){
-            var nesturl = 'https://developer-api.nest.com';
-            nesturl = nesturl + '?auth=' + accesstoken;
-
-            var xhttp = new XMLHttpRequest();
-
-            var options = {
-                headers: { 'Content-Type': 'application/json' ,'Authorization': 'Bearer ' + accesstoken }
-            }
-            xhttp.onreadystatechange = function() {
-                if ( this.readyState == 4 && this.status == 200) {
-                    var newdevices = [];
-                    var text = this.responseText;
-                    var list = JSON.parse(text);
-                    console.log(list)
-                    var types =Object.keys(list.devices);
-                    for (var i in types){
-                        console.log('types ' + types[i]);
-                        var typeids = Object.keys(list.devices[types[i]]); //muß ohne . sein types[i], steht für .thermostats, .cameras .smoke_co_alarms
-                        console.log("typeids array" + typeids);
-                        for (var j in typeids){
-                            console.log('id ' + typeids[j]);
-                            console.log('name '+ list.devices[types[i]][typeids[j]].where_name); //wieder ohne ., hier stehen die kryptischen Ids
-                            newdevices.push({"id": typeids[j], "type": types[i], "name": list.devices[types[i]][typeids[j]].where_name});
-                            //addToTable('devices', [typeids[j], types[i], list.devices[types[i]][typeids[j]].where_name]);
-                        }
-                    }
-                }
-            }        
-            xhttp.open("GET", nesturl, true);
-            xhttp.send();
-
-        }
-
         // the function loadSettings has to exist ...
         function load(settings, onChange) {
             if (!settings) return;
@@ -94,7 +60,7 @@
                         }
                         xhttp.onreadystatechange = function () {
                             if (this.readyState == 4 && this.status == 200) {
-                                var newdevices = [];
+                                var newdevices = []; //brauchen wir nicht mehr, außer debug
                                 var text = this.responseText;
                                 var list = JSON.parse(text);
                                 console.log(list)
@@ -108,7 +74,7 @@
                                         console.log('name ' + list.devices[types[i]][typeids[j]].where_name); //wieder ohne ., hier stehen die kryptischen Ids
                                         newdevices.push({ "id": typeids[j], "type": types[i], "name": list.devices[types[i]][typeids[j]].where_name });
                                         var isFound = false;
-                                        for (var k = 0; k < devices.length; k++) {
+                                        for (var k = 0; i < devices.length; k++) {
                                             if (devices[k].id === typeids[j]) {
                                                 isFound = true;
                                                 break;
@@ -124,17 +90,16 @@
                                         }
                                     }
                                 }
+                                //nach Beendigung der Schleife nachschauen ob was neues gefunden
+                                if (changed) {
+                                    console.log('devices now ' + JSON.stringify(devices));
+                                    onChange();
+                                    showDevice(devices);
+                                }
                             }
                         }
                         xhttp.open("GET", nesturl, true);
                         xhttp.send();
-
-                        if (changed) {
-                            console.log('devices now ' + JSON.stringify(devices));
-                            onChange();
-                            showDevice(devices);
-                        }
-
                     } else {
                     showMessage(_('Start or enable adapter first'));
                     }
