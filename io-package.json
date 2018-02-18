@@ -21,27 +21,27 @@
         "enabled":                  true,
 	"extIcon":                  "https://raw.githubusercontent.com/foxthefox/ioBroker.nest/master/admin/nest.png",
 	"keywords":                 ["nest"],
+	"materialize":	 	    true,
         "readme":                   "https://github.com/foxthefox/ioBroker.nest/blob/master/README.md",
 	"loglevel":                 "debug",
         "type":                     "common adapters"
     },
     "native": {
-        "nestweb": "www.nest.org",
         "access_token": "1234567FFaa",
         "devices": [
                 {
                     "id": "peyiJNo0IldT2YlIVtYaGQ",
-                    "name": "Themostat",
+                    "name": "Beispiel Themostat",
                     "type": "thermostats"
                 },
                 {
                     "id": "RTMTKxsQTCxzVcsySOHPxKoF4OyCifrs",
-                    "name": "Rauchmelder",
+                    "name": "Beispiel Rauchmelder",
                     "type": "smoke_co_alarms"
                 },
                 {
                     "id": "awJo6rH",
-                    "name": "Kamera",
+                    "name": "Beispiel Kamera",
                     "type": "cameras"
                 }                
             ]
