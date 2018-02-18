@@ -71,13 +71,46 @@
             });
         }
     }
+    function getDevices(accesstoken){
+        var nesturl = 'https://developer-api.nest.com';
+        nesturl = nesturl + '?auth=' + accesstoken;
 
+        var xhttp = new XMLHttpRequest();
+
+        var options = {
+            headers: { 'Content-Type': 'application/json' ,'Authorization': 'Bearer ' + accesstoken }
+        }
+        xhttp.onreadystatechange = function() {
+            if ( this.readyState == 4 && this.status == 200) {
+
+                var text = this.responseText;
+                var list = JSON.parse(text);
+                console.log(list)
+                var types =Object.keys(list.devices);
+                for (var i in types){
+                    console.log('types ' + types[i]);
+                    var typeids = Object.keys(list.devices[types[i]]); //muß ohne . sein types[i], steht für .thermostats, .cameras .smoke_co_alarms
+                    console.log("typeids array" + typeids);
+                    for (var j in typeids){
+                        console.log('id ' + typeids[j]);
+                        console.log('name '+ list.devices[types[i]][typeids[j]].where_name); //wieder ohne ., hier stehen die kryptischen Ids
+                        devices.push({"id": typeids[j], "type": types[i], "name": list.devices[types[i]][typeids[j]].where_name});
+                        editTable('devices', ['id', 'name','type'], devices, 570);
+                        //addToTable('devices', [typeids[j], types[i], list.devices[types[i]][typeids[j]].where_name]);
+                    }
+                }  
+            }
+        }        
+        xhttp.open("GET", nesturl, true);
+        xhttp.send();
+    }
 
     // the function loadSettings has to exist ...
     function load(settings, onChange) {
 
         if (!settings) return;
-
+        
+        access_token = settings.access_token;
         devices = settings.devices || [];
 
         for (var key in settings) {
@@ -85,7 +118,9 @@
         }
 
         editTable('devices', ['id', 'name','type'], devices, 570);
-
+        
+        $('#getDevices').button().click(getDevices(access_token));
+        
         // Signal to admin, that no changes yet
         onChange(false);
     }
@@ -119,13 +154,12 @@
     </tr></table>
     <table>
         <tr>
-            <td><label class="translate" for="nestweb">NEST web address</label></td>
-            <td><input type="text" id="nestweb" class="value"/></td>
-        </tr>
-        <tr>
             <td><label class="translate" for="access_token">NEST access_token</label></td>
             <td><input type="text" id="access_token" class="value"/></td>
             </td>
+        </tr>
+        <tr>
+            <td><button class="translate" id="getDevices">get Devices</button></td>
         </tr>
     </table>
 
