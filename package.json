@@ -3,22 +3,19 @@
   "version": "0.0.1",
   "description": "ioBroker nest Adapter",
   "author": {
-    "name": "Author foxthefox",
+    "name": "foxthefox",
     "email": "foxthefox@wysiwis.net"
   },
   "contributors": [
     {
-      "name": "Author foxthefox",
-      "email": "foxthefox@mail.com"
     }
   ],
   "homepage": "https://github.com/foxthefox/ioBroker.nest",
   "license": "MIT",
   "keywords": [
-    "ioBroker",
     "nest",
-    "openenergy",
-    "Smart Home"
+    "thermostat",
+    "protect"
   ],
   "repository": {
     "type": "git",
@@ -29,17 +26,13 @@
     "eventsource":"^1.0.5"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-replace": "^0.9.3",
-    "grunt-contrib-jshint": "^0.11.2",
-    "grunt-jscs": "^2.0.0",
-    "grunt-http": "^1.6.0",
-    "mocha": "^2.3.4",
-    "chai": "^3.4.1"
+      "gulp": "^3.9.1",
+      "mocha": "^4.1.0",
+      "chai": "^4.1.2"
   },
   "main": "main.js",
   "scripts": {
-    "test": "node node_modules/mocha/bin/mocha"
+     "test": "node node_modules/mocha/bin/mocha --exit
   },
   "bugs": {
     "url": "https://github.com/ioBroker/ioBroker.nest/issues"
