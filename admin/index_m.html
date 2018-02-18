@@ -21,6 +21,10 @@
             if (!settings) return;
             devices = settings.devices || [];
             
+            var product_id = settings.client_id;
+            var product_secret = settings.client_secret;
+            var product_pin = settings.pin;
+            
             var accesstoken =  settings.access_token;
             
             $('.value').each(function () {            
@@ -105,7 +109,7 @@
                     }
                 });
             }).attr('title', _('update adapter information'));
-            
+            if (product_pin && product_id && product_secret) {
             $('#table-button-create').click(function () {
                 getIsAdapterAlive(function (isAlive) {
                     if (isAlive) {
@@ -134,6 +138,7 @@
                     }
                 });
             }).attr('title', _('get access_token'));
+            }
             
             //delete buttons in tabelle
             var $div  = $('#values');
