@@ -39,9 +39,9 @@
 		]
     },
     "native": {
-	"client_id": "product_id",
-        "client_secret": "product_secret",
-        "pin":"code",
+	"client_id": "",
+        "client_secret": "",
+        "pin":"",
         "access_token": "your token",
         "devices": [
                 {
