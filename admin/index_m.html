@@ -1,0 +1,261 @@
+<html>
+    <head>
+    <link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+    <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+    
+    <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+    
+    <script type="text/javascript" src="../../js/translate.js"></script>
+    <script type="text/javascript" src="../../lib/js/materialize.js"></script>
+    <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+    <script type="text/javascript" src="words.js"></script>
+    
+    
+    <!-- you have to define 2 functions in the global scope: -->
+    <script type="text/javascript">
+       devices = [];
+
+       function getDevices(accesstoken){
+            var nesturl = 'https://developer-api.nest.com';
+            nesturl = nesturl + '?auth=' + accesstoken;
+
+            var xhttp = new XMLHttpRequest();
+
+            var options = {
+                headers: { 'Content-Type': 'application/json' ,'Authorization': 'Bearer ' + accesstoken }
+            }
+            xhttp.onreadystatechange = function() {
+                if ( this.readyState == 4 && this.status == 200) {
+                    var newdevices = [];
+                    var text = this.responseText;
+                    var list = JSON.parse(text);
+                    console.log(list)
+                    var types =Object.keys(list.devices);
+                    for (var i in types){
+                        console.log('types ' + types[i]);
+                        var typeids = Object.keys(list.devices[types[i]]); //muß ohne . sein types[i], steht für .thermostats, .cameras .smoke_co_alarms
+                        console.log("typeids array" + typeids);
+                        for (var j in typeids){
+                            console.log('id ' + typeids[j]);
+                            console.log('name '+ list.devices[types[i]][typeids[j]].where_name); //wieder ohne ., hier stehen die kryptischen Ids
+                            newdevices.push({"id": typeids[j], "type": types[i], "name": list.devices[types[i]][typeids[j]].where_name});
+                            //addToTable('devices', [typeids[j], types[i], list.devices[types[i]][typeids[j]].where_name]);
+                        }
+                    }
+                }
+            }        
+            xhttp.open("GET", nesturl, true);
+            xhttp.send();
+
+        }
+
+        // the function loadSettings has to exist ...
+        function load(settings, onChange) {
+            if (!settings) return;
+            devices = settings.devices || [];
+            $('.value').each(function () {            
+                var $key = $(this);
+                var id = $key.attr('id');
+                if ($key.attr('type') === 'checkbox') {
+                    // do not call onChange direct, because onChange could expect some arguments
+                    $key.prop('checked', settings[id]).change(function() {
+                        onChange();
+                    });
+                } else {
+                    // do not call onChange direct, because onChange could expect some arguments
+                    $key.val(settings[id]).change(function() {
+                        onChange();
+                    }).keyup(function() {
+                        onChange();
+                    });
+                }
+            });
+            //Tabelle mit den Geräten anzeigen
+            showDevice(devices);
+            //button inits, können nicht woanders hinverlagert werden, da sonst onChange nicht definiert ist
+            //search-button
+            $('#table-button-search').click(function () {
+                getIsAdapterAlive(function (isAlive) {
+                    if (isAlive) {
+                        console.log('send browse to nest');
+                        var changed = false;
+
+                        var nesturl = 'https://developer-api.nest.com';
+                        nesturl = nesturl + '?auth=' + accesstoken;
+
+                        var xhttp = new XMLHttpRequest();
+
+                        var options = {
+                            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + accesstoken }
+                        }
+                        xhttp.onreadystatechange = function () {
+                            if (this.readyState == 4 && this.status == 200) {
+                                var newdevices = [];
+                                var text = this.responseText;
+                                var list = JSON.parse(text);
+                                console.log(list)
+                                var types = Object.keys(list.devices);
+                                for (var i in types) {
+                                    console.log('types ' + types[i]);
+                                    var typeids = Object.keys(list.devices[types[i]]); //muß ohne . sein types[i], steht für .thermostats, .cameras .smoke_co_alarms
+                                    console.log("typeids array" + typeids);
+                                    for (var j in typeids) {
+                                        console.log('id ' + typeids[j]);
+                                        console.log('name ' + list.devices[types[i]][typeids[j]].where_name); //wieder ohne ., hier stehen die kryptischen Ids
+                                        newdevices.push({ "id": typeids[j], "type": types[i], "name": list.devices[types[i]][typeids[j]].where_name });
+                                        var isFound = false;
+                                        for (var k = 0; i < devices.length; k++) {
+                                            if (devices[k].id === typeids[j]) {
+                                                isFound = true;
+                                                break;
+                                            }
+                                        }
+                                        if (!isFound) {
+                                            changed = true;
+                                            devices.push({
+                                                id: typeids[j],
+                                                type: types[i],
+                                                name: list.devices[types[i]][typeids[j]].where_name
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        xhttp.open("GET", nesturl, true);
+                        xhttp.send();
+
+                        if (changed) {
+                            console.log('devices now ' + JSON.stringify(devices));
+                            onChange();
+                            showDevice(devices);
+                        }
+
+                    } else {
+                    showMessage(_('Start or enable adapter first'));
+                    }
+                });
+            }).attr('title', _('update adapter information'));
+            //delete buttons in tabelle
+            var $div  = $('#values');
+            var $table = $div.find('.table-values');
+            var $lines = $table.find('.table-lines');
+            $lines.find('a[data-command]').each(function () {
+                    $(this).on('click', function () {
+                        var id = $(this).data('index'); //index=id entspricht der Position im device-array
+                        //var index = devices.map(function(obj){ return obj.uid; }).indexOf(id); //für Übergabe als event und suche nach position
+                        if( id !== -1){
+                            devices.splice(id,1);
+                            //onChange && onChange();
+                            onChange();
+                            showDevice(devices);
+                        }   
+                    })
+            }).addClass('red');
+            $lines.find('.values').each(function () {
+                $(this).change(function () {
+                    var val = $(this).val();
+                    if (val) {
+                        console.log('textänderung'+val);
+                        onChange();
+                    }
+                });
+            });
+            onChange(false);
+            //M.updateTextFields();  // function Materialize.updateTextFields(); to reinitialize all the Materialize labels on the page if you are dynamically adding inputs.
+        }
+        function save(callback) {
+            var obj = {};
+            $('.value').each(function () {
+                var $this = $(this);
+                if ($this.attr('type') === 'checkbox') {
+                    obj[$this.attr('id')] = $this.prop('checked');
+                } else {
+                    obj[$this.attr('id')] = $this.val();
+                }
+            });
+            // Get edited table
+            obj.devices = table2values('values'); //es wird nicht devices abgespeichert, sondern der Inhalt der Tabelle (all Zeilen müssen value="" haben)
+            callback(obj);
+        }
+        function showDevice(obj) {
+            $('#devices').empty();
+            for (var i in obj){
+                var text = '';
+                //text += '<td style="text-align: center; white-space: nowrap;">' + obj[i].ip+ '</td>';
+                text += '<td><input class="values" value="' + obj[i].id + '" type="text" data-index="' + i + '" data-name="ip"/></td>'; //auch wenn hier nix geändert werden soll, muß mindestens value drin sein, damit table2values funktioniert
+                //text += '<td style="text-align: center; white-space: nowrap;">' + obj[i].type + '</td>';
+                text += '<td><input class="values" value="' + obj[i].type + '" type="text" data-index="' + i + '" data-name="type"/></td>';
+                //text += '<td style="text-align: center; white-space: nowrap;">' + obj[i].name + '</td>';
+                text += '<td><input class="values" value="' + obj[i].name + '" type="text" data-index="' + i + '" data-name="name"/></td>';
+                text += '<td style="text-align: center; white-space: nowrap;"><a data-command="delete" data-index="' + i + '" id="del-button_'+ obj[i].uid + '" class="btn"><i class="material-icons">delete_forever</i></a></td>'; //command und id sind nicht benutzt
+                text = '<tr data-id="' + obj[i].uid + '">' + text + '</tr>';
+                $('#devices').append(text);        
+            }
+        }
+       
+    </script>
+            <style>
+                    .sub-title {
+                        margin-top: 2rem!important;
+                        padding: 0.5rem;
+                        background: #64b5f6;
+                        color: white;
+                    }
+                </style>
+            </head>
+    <body>
+        <div class="m adapter-container">
+            <div class="section">
+                <div class="row">
+                    <div class="col s12 m4 l2">
+                        <img src="nest.png" style="height:7em; width: 7em;" class="logo">
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="row">
+                    <div class="col s12">
+                        <h6 class="translate sub-title">NestLogin</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <p class="translate">create developer login and create new product (any)</p>
+                        <p class="translate">use product_id, product_secret, pin to get access_token</p>
+                    </div>            
+                </div>        
+                <div class="row">
+                    <div class="col s12">
+                        <input class="value" id="access_token"/><label for="access_token" class="translate">access_token</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="section">
+                <div class="row">
+                    <div class="col s12">
+                        <h6 class="translate sub-title">Nest devices</h6>
+                        <p class="translate">Try to push the Search Button until you find the amount of Nest devices in your home.</p>
+                        <p class="translate">If you see blue delete buttons, save settings first and open again the page.</p>
+                    </div>            
+                </div>
+                <div id="values" style="width: 100%; height: calc(100% - 30px); overflow: auto;">
+                    <a id="table-button-search" class="btn"><span class="translate">Get Devices</span></a>
+                    <table class="table-values" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th data-name="id"       style="width: 150px"class="translate">id</th>
+                                <th data-name="type"     style="width: 150px" class="translate">type</th>
+                                <th data-name="name"     style="width: 200px" class="translate">name</th>
+                                <th data-buttons="delete" style="width: 40px" class="translate">delete</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-lines" id="devices"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
