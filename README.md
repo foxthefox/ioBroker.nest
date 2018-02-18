@@ -1,4 +1,4 @@
-![Logo](admin/nest.png)
+![Logo](admin/nest_logo.jpg)
 # ioBroker.nest
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.nest.svg)](https://www.npmjs.com/package/iobroker.nest)
