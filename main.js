@@ -16,7 +16,7 @@ var adapter = utils.Adapter('nest');
 
 var types = [];
 var typeobjects = {};
-
+var nestTimeout; //falls es mal ein polling gibt
 
 
 var nameObjects = {
