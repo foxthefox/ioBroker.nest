@@ -40,3 +40,9 @@ The following objects are currently implemented:
 ## Changelog
 #### 0.0.1
 * initial release only reading status of all devices
+
+## License
+
+The MIT License (MIT)
+
+Copyright (c) 2018 foxthefox <foxthefox@wysiwis.net>
