@@ -21,6 +21,7 @@
 				 "de": "ioBroker Nest Adapter",
 				 "ru": "ioBroker Nest драйвер как образец"
 		},
+        "license": "MIT",
         "platform":                 "Javascript/Node.js",
         "mode":                     "daemon",
         "icon":                     "nest.png",
