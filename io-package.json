@@ -15,7 +15,7 @@
 		    "pl": "początkowa wersja"
 		  }
 		},
-        "title":                    "nest adapter",
+        "title":                    "nest",
         "desc":                     {
 				 "en": "ioBroker nest Adapter",
 				 "de": "ioBroker Nest Adapter",
