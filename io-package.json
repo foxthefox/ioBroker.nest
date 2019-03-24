@@ -29,6 +29,7 @@
 	"extIcon":                  "https://raw.githubusercontent.com/foxthefox/ioBroker.nest/master/admin/nest_logo.gif",
 	"keywords":                 ["nest"],
 	"materialize":	 	    true,
+	"licence":		    "MIT",
         "readme":                   "https://github.com/foxthefox/ioBroker.nest/blob/master/README.md",
 	"loglevel":                 "debug",
         "type":                     "common adapters",
