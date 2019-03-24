@@ -1,7 +1,7 @@
 ![Logo](admin/nest_logo.gif)
 # ioBroker.nest
 
-[![NPM version](http://img.shields.io/npm/v/iobroker.nest.svg)](https://www.npmjs.com/package/iobroker.nest)
+![Number of Installations](http://iobroker.live/badges/nest-installed.svg) ![Number of Installations](http://iobroker.live/badges/nest-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.nest.svg)](https://www.npmjs.com/package/iobroker.nest)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.nest.svg)](https://www.npmjs.com/package/iobroker.nest)
 [![Build Status](https://travis-ci.org/foxthefox/ioBroker.nest.svg?branch=master)](https://travis-ci.org/foxthefox/ioBroker.nest)
 

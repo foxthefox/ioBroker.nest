@@ -15,12 +15,13 @@
 		    "pl": "początkowa wersja"
 		  }
 		},
-        "title":                    "nest adapter",
+        "title":                    "nest",
         "desc":                     {
 				 "en": "ioBroker nest Adapter",
 				 "de": "ioBroker Nest Adapter",
 				 "ru": "ioBroker Nest драйвер как образец"
 		},
+        "license": "MIT",
         "platform":                 "Javascript/Node.js",
         "mode":                     "daemon",
         "icon":                     "nest.png",

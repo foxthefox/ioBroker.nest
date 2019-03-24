@@ -7,8 +7,7 @@
     "email": "foxthefox@wysiwis.net"
   },
   "contributors": [
-    {
-    }
+    {}
   ],
   "homepage": "https://github.com/foxthefox/ioBroker.nest",
   "license": "MIT",
@@ -23,16 +22,21 @@
   },
   "dependencies": {
     "request": "^2.83.0",
-    "eventsource":"^1.0.5"
+    "eventsource": "^1.0.5",
+    "@iobroker/adapter-core": "^1.0.3"
   },
   "devDependencies": {
-      "gulp": "^3.9.1",
-      "mocha": "^4.1.0",
-      "chai": "^4.1.2"
+    "gulp": "^3.9.1",
+    "mocha": "^4.1.0",
+    "chai": "^4.1.2",
+    "@iobroker/testing": "^1.1.10"
   },
   "main": "main.js",
   "scripts": {
-     "test": "node node_modules/mocha/bin/mocha --exit"
+    "test": "npm run test:package && npm run test:unit",
+    "test:package": "mocha test/package --exit",
+    "test:unit": "mocha test/unit --exit",
+    "test:integration": "mocha test/integration --exit"
   },
   "bugs": {
     "url": "https://github.com/ioBroker/ioBroker.nest/issues"
