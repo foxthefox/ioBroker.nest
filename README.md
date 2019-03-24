@@ -45,4 +45,4 @@ The following objects are currently implemented:
 
 The MIT License (MIT)
 
-Copyright (c) 2018 foxthefox <foxthefox@wysiwis.net>
+Copyright (c) 2017 -2019 foxthefox <foxthefox@wysiwis.net>
