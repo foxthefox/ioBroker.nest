@@ -2,10 +2,8 @@
 # ioBroker.nest
 
 ![Number of Installations](http://iobroker.live/badges/nest-installed.svg) ![Number of Installations](http://iobroker.live/badges/nest-stable.svg) [![NPM version](http://img.shields.io/npm/v/iobroker.nest.svg)](https://www.npmjs.com/package/iobroker.nest)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.nest.svg)](https://www.npmjs.com/package/iobroker.nest)
-[![Build Status](https://travis-ci.org/foxthefox/ioBroker.nest.svg?branch=master)](https://travis-ci.org/foxthefox/ioBroker.nest)
 
-[![NPM](https://nodei.co/npm/iobroker.nest.png?downloads=true)](https://nodei.co/npm/iobroker.nest/)
+**Tests:** ![Test and Release](https://github.com/foxthefox/ioBroker.s7webapi/workflows/Test%20and%20Release/badge.svg)
 
 adapter for NEST devices like NEST-thermostat, NEST-protect, NEST-camera
 
@@ -38,6 +36,13 @@ The following objects are currently implemented:
 * commands for thermostat
 
 ## Changelog
+## 1.0.0 BREAKING CHANGE
+* the adapter does not use the old nest portal anymore
+* the new google nest portal is used
+* change to classbased adapter
+* githubactions instead travis
+
+
 #### 0.0.1
 * initial release only reading status of all devices
 
@@ -45,4 +50,4 @@ The following objects are currently implemented:
 
 The MIT License (MIT)
 
-Copyright (c) 2017 -2019 foxthefox <foxthefox@wysiwis.net>
+Copyright (c) 2017 -2022 foxthefox <foxthefox@wysiwis.net>

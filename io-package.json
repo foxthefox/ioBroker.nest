@@ -1,59 +1,80 @@
 {
-    "common": {
-        "name":                     "nest",
-        "version":                  "0.0.2",
-	    "news": {
-		"0.0.1": {
-		    "en": "initial version",
-		    "de": "erste Version",
-		    "ru": "Первоначальная версия",
-		    "pt": "versão inicial",
-		    "nl": "eerste versie",
-		    "fr": "version initiale",
-		    "it": "versione iniziale",
-		    "es": "versión inicial",
-		    "pl": "początkowa wersja"
-		  }
+	"common": {
+		"name": "nest",
+		"version": "1.0.0",
+		"news": {
+			"0.0.1": {
+				"en": "initial version",
+				"de": "erste Version",
+				"ru": "Первоначальная версия",
+				"pt": "versão inicial",
+				"nl": "eerste versie",
+				"fr": "version initiale",
+				"it": "versione iniziale",
+				"es": "versión inicial",
+				"pl": "początkowa wersja"
+			}
 		},
-        "title":                    "nest",
-        "desc":                     {
-				 "en": "nest Adapter",
-				 "de": "Nest Adapter",
-				 "ru": "Nest драйвер как образец"
+		"title": "nest",
+		"titleLang": {
+			"en": "Nest Devices",
+			"de": "Nest-Geräte",
+			"ru": "Гнездовые устройства",
+			"pt": "Dispositivos Nest",
+			"nl": "Nest-apparaten",
+			"fr": "Appareils Nest",
+			"it": "Dispositivi Nest",
+			"es": "Dispositivos Nest",
+			"pl": "Urządzenia zagnieżdżające",
+			"zh-cn": "嵌套设备"
 		},
-        "license": "MIT",
-        "platform":                 "Javascript/Node.js",
-        "mode":                     "daemon",
-        "icon":                     "nest.png",
-        "enabled":                  true,
-	"extIcon":                  "https://raw.githubusercontent.com/foxthefox/ioBroker.nest/master/admin/nest_logo.gif",
-	"keywords":                 ["nest"],
-	"materialize":	 	    true,
-	"licence":		    "MIT",
-        "readme":                   "https://github.com/foxthefox/ioBroker.nest/blob/master/README.md",
-	"loglevel":                 "debug",
-        "type":                     "common adapters",
-	"authors": [
-            {
-                "name": "foxthefox",
-                "email": "foxthefox@wysiwis.net"
-            }
+		"desc": {
+			"en": "nest adapter",
+			"de": "Nest-Adapter",
+			"ru": "гнездовой адаптер",
+			"pt": "adaptador de ninho",
+			"nl": "nestadapter",
+			"fr": "adaptateur de nid",
+			"it": "adattatore nido",
+			"es": "adaptador de nido",
+			"pl": "gniazdo adaptera",
+			"zh-cn": "巢适配器"
+		},
+		"license": "MIT",
+		"authors": [ "foxthefox <foxthefox@wysiwis.net>" ],
+		"platform": "Javascript/Node.js",
+		"main": "main.js",
+		"mode": "daemon",
+		"type": "iot-systems",
+		"compact": true,
+		"icon": "nest.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/foxthefox/ioBroker.nest/master/admin/nest_logo.gif",
+		"keywords": [ "nest" ],
+		"materialize": true,
+		"connectionType": "local",
+		"dataSource": "poll",
+		"licence": "MIT",
+		"readme": "https://github.com/foxthefox/ioBroker.nest/blob/master/README.md",
+		"loglevel": "debug",
+		"dependencies": [
+			{
+				"js-controller": ">=2.0.0"
+			}
 		]
-    },
-    "native": {
-	"client_id": "",
-        "client_secret": "",
-        "pin":"",
-        "access_token": "your token",
-        "devices": [
-                {
-                    "id": "peyiJNo0IldT2YlIVtYaGQ",
-                    "name": "Beispiel Themostat",
-                    "type": "thermostats"
-                }              
-            ]
-        },
-    "objects": [
-
-    ]
+	},
+	"native": {
+		"client_id": "",
+		"client_secret": "",
+		"pin": "",
+		"access_token": "your token",
+		"devices": [
+			{
+				"id": "peyiJNo0IldT2YlIVtYaGQ",
+				"name": "Beispiel Themostat",
+				"type": "thermostats"
+			}
+		]
+	},
+	"objects": []
 }
