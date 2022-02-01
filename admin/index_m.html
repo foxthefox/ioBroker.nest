@@ -1,45 +1,49 @@
 <html>
-    <head>
-    <link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
     <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
-    
+
     <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
-    
+
     <script type="text/javascript" src="../../js/translate.js"></script>
     <script type="text/javascript" src="../../lib/js/materialize.js"></script>
     <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+
+    <!-- Load our own files -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <script type="text/javascript" src="words.js"></script>
-    
-    
+
+
     <!-- you have to define 2 functions in the global scope: -->
     <script type="text/javascript">
-       var devices = [];
+        var devices = [];
 
         // the function loadSettings has to exist ...
         function load(settings, onChange) {
             if (!settings) return;
             devices = settings.devices || [];
-            
+
             var product_id = settings.client_id;
             var product_secret = settings.client_secret;
             var product_pin = settings.pin;
-            
-            var accesstoken =  settings.access_token;
-            
-            $('.value').each(function () {            
+
+            var accesstoken = settings.access_token;
+
+            $('.value').each(function () {
                 var $key = $(this);
                 var id = $key.attr('id');
                 if ($key.attr('type') === 'checkbox') {
                     // do not call onChange direct, because onChange could expect some arguments
-                    $key.prop('checked', settings[id]).change(function() {
+                    $key.prop('checked', settings[id]).change(function () {
                         onChange();
                     });
                 } else {
                     // do not call onChange direct, because onChange could expect some arguments
-                    $key.val(settings[id]).change(function() {
+                    $key.val(settings[id]).change(function () {
                         onChange();
-                    }).keyup(function() {
+                    }).keyup(function () {
                         onChange();
                     });
                 }
@@ -105,63 +109,63 @@
                         xhttp.open("GET", nesturl, true);
                         xhttp.send();
                     } else {
-                    showMessage(_('Start or enable adapter first'));
+                        showMessage(_('Start or enable adapter first'));
                     }
                 });
             }).attr('title', _('update adapter information'));
             if (product_pin && product_id && product_secret) {
-            $('#table-button-create').click(function () {
-                getIsAdapterAlive(function (isAlive) {
-                    if (isAlive) {
-                        console.log('send post to nest');
+                $('#table-button-create').click(function () {
+                    getIsAdapterAlive(function (isAlive) {
+                        if (isAlive) {
+                            console.log('send post to nest');
 
-                        var tokenurl = 'https://api.home.nest.com/oauth2/access_token';
-                        tokenurl = tokenurl+ '?client_id=' + product_id + '&client_secret=' + product_secret + '&grant_type=authorization_code' + '&code=' + product_pin;
-                        console.log("url " + tokenurl);
-                        var xhttp = new XMLHttpRequest();
+                            var tokenurl = 'https://api.home.nest.com/oauth2/access_token';
+                            tokenurl = tokenurl + '?client_id=' + product_id + '&client_secret=' + product_secret + '&grant_type=authorization_code' + '&code=' + product_pin;
+                            console.log("url " + tokenurl);
+                            var xhttp = new XMLHttpRequest();
 
-                        xhttp.onreadystatechange = function () {
-                            if (this.readyState == 4 && this.status == 200) {
-                                var text = this.responseText;
-                                var list = JSON.parse(text);
-                                console.log(list);
-                                console.log(list.access_token);
-                                access_token = list.access_token;
-                                onChange();
-                                showMessage(access_token, 'copy the code to the page field');
+                            xhttp.onreadystatechange = function () {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    var text = this.responseText;
+                                    var list = JSON.parse(text);
+                                    console.log(list);
+                                    console.log(list.access_token);
+                                    access_token = list.access_token;
+                                    onChange();
+                                    showMessage(access_token, 'copy the code to the page field');
+                                }
                             }
+                            xhttp.open("POST", tokenurl, true);
+                            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                            xhttp.send();
+                        } else {
+                            showMessage(_('Start or enable adapter first'));
                         }
-                        xhttp.open("POST", tokenurl, true);
-                        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                        xhttp.send();
-                    } else {
-                    showMessage(_('Start or enable adapter first'));
-                    }
-                });
-            }).attr('title', _('get access_token'));
+                    });
+                }).attr('title', _('get access_token'));
             }
-            
+
             //delete buttons in tabelle
-            var $div  = $('#values');
+            var $div = $('#values');
             var $table = $div.find('.table-values');
             var $lines = $table.find('.table-lines');
             $lines.find('a[data-command]').each(function () {
-                    $(this).on('click', function () {
-                        var id = $(this).data('index'); //index=id entspricht der Position im device-array
-                        //var index = devices.map(function(obj){ return obj.uid; }).indexOf(id); //für Übergabe als event und suche nach position
-                        if( id !== -1){
-                            devices.splice(id,1);
-                            //onChange && onChange();
-                            onChange();
-                            showDevice(devices);
-                        }   
-                    })
+                $(this).on('click', function () {
+                    var id = $(this).data('index'); //index=id entspricht der Position im device-array
+                    //var index = devices.map(function(obj){ return obj.uid; }).indexOf(id); //für Übergabe als event und suche nach position
+                    if (id !== -1) {
+                        devices.splice(id, 1);
+                        //onChange && onChange();
+                        onChange();
+                        showDevice(devices);
+                    }
+                })
             }).addClass('red');
             $lines.find('.values').each(function () {
                 $(this).change(function () {
                     var val = $(this).val();
                     if (val) {
-                        console.log('textänderung'+val);
+                        console.log('textänderung' + val);
                         onChange();
                     }
                 });
@@ -185,7 +189,7 @@
         }
         function showDevice(obj) {
             $('#devices').empty();
-            for (var i in obj){
+            for (var i in obj) {
                 var text = '';
                 //text += '<td style="text-align: center; white-space: nowrap;">' + obj[i].id+ '</td>';
                 text += '<td><input class="values" value="' + obj[i].id + '" type="text" data-index="' + i + '" data-name="id"/></td>'; //auch wenn hier nix geändert werden soll, muß mindestens value drin sein, damit table2values funktioniert
@@ -193,106 +197,111 @@
                 text += '<td><input class="values" value="' + obj[i].type + '" type="text" data-index="' + i + '" data-name="type"/></td>';
                 //text += '<td style="text-align: center; white-space: nowrap;">' + obj[i].name + '</td>';
                 text += '<td><input class="values" value="' + obj[i].name + '" type="text" data-index="' + i + '" data-name="name"/></td>';
-                text += '<td style="text-align: center; white-space: nowrap;"><a data-command="delete" data-index="' + i + '" id="del-button_'+ obj[i].id + '" class="btn"><i class="material-icons">delete_forever</i></a></td>'; //command und id sind nicht benutzt
+                text += '<td style="text-align: center; white-space: nowrap;"><a data-command="delete" data-index="' + i + '" id="del-button_' + obj[i].id + '" class="btn"><i class="material-icons">delete_forever</i></a></td>'; //command und id sind nicht benutzt
                 text = '<tr data-id="' + obj[i].id + '">' + text + '</tr>';
-                $('#devices').append(text);        
+                $('#devices').append(text);
             }
         }
-       
-    </script>
-            <style>
-                    .sub-title {
-                        margin-top: 2rem!important;
-                        padding: 0.5rem;
-                        background: #64b5f6;
-                        color: white;
-                    }
-                </style>
-            </head>
-    <body>
-        <div class="m adapter-container">
-            <div class="section">
-                <div class="row">
-                    <div class="col s12 m4 l2">
-                        <img src="nest_logo.gif" style="height:7em; width: 14em;" class="logo">
-                    </div>
-                </div>
-            </div>
-                        <div class="section">
-                <div class="row">
-                    <div class="col s12">
-                        <h6 class="translate sub-title">Nest Create Access Token</h6>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12">
-                        <p class="translate">create developer login and create new product (any)</p>
-                        <p class="translate">enter product_id, product_secret, pin here</p>
-                        <p class="translate">this section is not working!!!!</p>
-                        <p class="translate">use only the access_token in below section!!!!</p>
-                    </div>            
-                </div>
-                <div class="row">     
-                    <div class="col s12">
-                        <input class="value" id="client_id"/><label for="client_id" class="translate">Client_ID</label>
-                    </div>
-                </div>
-                <div class="row">     
-                    <div class="col s12">
-                        <input class="value" id="client_secret"/><label for="client_secret" class="translate">Client_Secret</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12">
-                        <input class="value" id="pin"/><label for="pin" class="translate">pin</label>
-                    </div>
-                    <div class="col s12">
-                        <a id="table-button-create" class="btn"><span class="translate">Create Token</span></a>
-                    </div>
-                </div>
-            </div>
-            <div class="section">
-                <div class="row">
-                    <div class="col s12">
-                        <h6 class="translate sub-title">NestLogin</h6>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12">
-                        <p class="translate">create developer login and create new product (any)</p>
-                        <p class="translate">use product_id, product_secret, pin to get access_token</p>
-                    </div>            
-                </div>        
-                <div class="row">
-                    <div class="col s12">
-                        <input class="value" id="access_token"/><label for="access_token" class="translate">access_token</label>
-                    </div>
-                </div>
-            </div>
 
-            <div class="section">
-                <div class="row">
-                    <div class="col s12">
-                        <h6 class="translate sub-title">Nest devices</h6>
-                        <p class="translate">Try to push the Search Button until to find Nest devices in your home.</p>
-                        <p class="translate">If you see blue delete buttons, save settings first and open again the page.</p>
-                    </div>            
-                </div>
-                <div id="values" style="width: 100%; height: calc(100% - 30px); overflow: auto;">
-                    <a id="table-button-search" class="btn"><span class="translate">Get Devices</span></a>
-                    <table class="table-values" style="width: 100%;">
-                        <thead>
-                            <tr>
-                                <th data-name="id"       style="width: 150px"class="translate">id</th>
-                                <th data-name="type"     style="width: 150px" class="translate">type</th>
-                                <th data-name="name"     style="width: 200px" class="translate">name</th>
-                                <th data-buttons="delete" style="width: 40px" class="translate">delete</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-lines" id="devices"></tbody>
-                    </table>
+    </script>
+    <style>
+        .sub-title {
+            margin-top: 2rem !important;
+            padding: 0.5rem;
+            background: #64b5f6;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="m adapter-container">
+        <div class="section">
+            <div class="row">
+                <div class="col s12 m4 l2">
+                    <img src="nest_logo.gif" style="height:7em; width: 14em;" class="logo">
                 </div>
             </div>
         </div>
-    </body>
-    </html>
+        <div class="section">
+            <div class="row">
+                <div class="col s12">
+                    <h6 class="translate sub-title">Nest Create Access Token</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <p class="translate">create developer login and create new product (any)</p>
+                    <p class="translate">enter product_id, product_secret, pin here</p>
+                    <p class="translate">this section is not working!!!!</p>
+                    <p class="translate">use only the access_token in below section!!!!</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <input class="value" id="client_id" /><label for="client_id" class="translate">Client_ID</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <input class="value" id="client_secret" /><label for="client_secret"
+                        class="translate">Client_Secret</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <input class="value" id="pin" /><label for="pin" class="translate">pin</label>
+                </div>
+                <div class="col s12">
+                    <a id="table-button-create" class="btn"><span class="translate">Create Token</span></a>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="row">
+                <div class="col s12">
+                    <h6 class="translate sub-title">NestLogin</h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <p class="translate">create developer login and create new product (any)</p>
+                    <p class="translate">use product_id, product_secret, pin to get access_token</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <input class="value" id="access_token" /><label for="access_token"
+                        class="translate">access_token</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="row">
+                <div class="col s12">
+                    <h6 class="translate sub-title">Nest devices</h6>
+                    <p class="translate">Try to push the Search Button until to find Nest devices in your home.</p>
+                    <p class="translate">If you see blue delete buttons, save settings first and open again the page.
+                    </p>
+                </div>
+            </div>
+            <div id="values" style="width: 100%; height: calc(100% - 30px); overflow: auto;">
+                <a id="table-button-search" class="btn"><span class="translate">Get Devices</span></a>
+                <table class="table-values" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th data-name="id" style="width: 150px" class="translate">id</th>
+                            <th data-name="type" style="width: 150px" class="translate">type</th>
+                            <th data-name="name" style="width: 200px" class="translate">name</th>
+                            <th data-buttons="delete" style="width: 40px" class="translate">delete</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-lines" id="devices"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

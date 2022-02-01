@@ -152,7 +152,7 @@ class Nest extends utils.Adapter {
 	constructor(options) {
 		super({
 			...options,
-			name: 's7webapi'
+			name: 'nest'
 		});
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
