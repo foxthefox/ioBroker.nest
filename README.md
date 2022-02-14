@@ -36,7 +36,7 @@ The following objects are currently implemented:
 * commands for thermostat
 
 ## Changelog
-## 1.0.0 BREAKING CHANGE
+## WIP 1.0.0 BREAKING CHANGE
 * the adapter does not use the old nest portal anymore
 * the new google nest portal is used
 * change to classbased adapter
