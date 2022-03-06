@@ -20,7 +20,7 @@
 	"dependencies": {
 		"request": "^2.83.0",
 		"eventsource": "^1.0.5",
-		"@iobroker/adapter-core": "^2.5.1"
+		"@iobroker/adapter-core": "^2.6.0"
 	},
 	"devDependencies": {
 		"@alcalzone/release-script": "^3.5.4",
