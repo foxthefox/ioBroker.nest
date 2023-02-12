@@ -452,13 +452,13 @@ class Nest extends utils.Adapter {
 			headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + accesstoken }
 		};
 
-		request(nesturl, options, function(err, resp, body) {
+		request(nesturl, options, (err, resp, body) => {
 			this.log.debug('status' + resp.statusCode + '  ' + resp.statusMessage);
 			this.log.debug('body ' + body);
 			if (resp.statusCode == 200) {
 				this.log.debug(body);
 				var list = JSON.parse(body);
-				updateDevices(list);
+				this.updateDevices(list);
 			} else {
 				this.log.debug('error ' + err + resp);
 			}
@@ -473,31 +473,31 @@ class Nest extends utils.Adapter {
 		};
 		var source = new EventSource(NEST_API_URL, { headers: headers });
 
-		source.addEventListener('put', function(event) {
+		source.addEventListener('put', (event) => {
 			this.log.debug('\n' + event.data); // Nest data in JSON format
 			this.log.debug('device' + JSON.stringify(JSON.parse(event.data).data));
 			var stream = JSON.parse(event.data);
 			if (stream.data) {
-				updateDevices(stream.data);
+				this.updateDevices(stream.data);
 			}
 		});
 
-		source.addEventListener('open', function(event) {
+		source.addEventListener('open', (event) => {
 			this.log.debug('Connection opened!');
 		});
 
-		source.addEventListener('auth_revoked', function(event) {
+		source.addEventListener('auth_revoked', (event) => {
 			this.log.debug('Authentication token was revoked.');
 			// Re-authenticate your user here.
 		});
 
 		source.addEventListener(
 			'error',
-			function(event) {
+			(event) => {
 				if (event.readyState == EventSource.CLOSED) {
-					this.log.error('Connection was closed!', event);
+					this.log.error('Connection was closed! ' + event);
 				} else {
-					this.log.error('An unknown error occurred: ', event);
+					this.log.error('An unknown error occurred: ' + event);
 				}
 			},
 			false

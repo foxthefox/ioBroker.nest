@@ -1,8 +1,34 @@
 {
 	"common": {
 		"name": "nest",
-		"version": "1.0.0",
+		"version": "1.0.1",
 		"news": {
+			"1.0.1": {
+				"en": "corrections",
+				"de": "korrekturen",
+				"ru": "коррекции",
+				"pt": "correções",
+				"nl": "vertaling:",
+				"fr": "corrections",
+				"it": "correzioni",
+				"es": "correcciones",
+				"pl": "poprawka",
+				"uk": "корекція",
+				"zh-cn": "更正"
+			},
+			"1.0.0": {
+				"en": "refactoring to classbased adapter",
+				"de": "refactoring zum klassenbasierten adapter",
+				"ru": "рефакторинг в классовом адаптере",
+				"pt": "refatoração ao adaptador de classe",
+				"nl": "vertaling:",
+				"fr": "refactoring to classbased adapt",
+				"it": "refactoring all'adattatore di classe",
+				"es": "refactorización del adaptador basado en clases",
+				"pl": "rekomendacja do adapterów klasowych",
+				"uk": "рефакторинг до класного адаптера",
+				"zh-cn": "重新分类的适应者"
+			},
 			"0.0.1": {
 				"en": "initial version",
 				"de": "erste Version",
