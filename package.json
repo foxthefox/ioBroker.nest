@@ -1,6 +1,6 @@
 {
 	"name": "iobroker.nest",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "ioBroker nest Adapter",
 	"author": {
 		"name": "foxthefox",
@@ -8,11 +8,7 @@
 	},
 	"homepage": "https://github.com/foxthefox/ioBroker.nest",
 	"license": "MIT",
-	"keywords": [
-		"nest",
-		"thermostat",
-		"protect"
-	],
+	"keywords": [ "nest", "thermostat", "protect" ],
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/foxthefox/ioBroker.nest.git"
