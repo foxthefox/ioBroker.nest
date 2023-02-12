@@ -495,9 +495,9 @@ class Nest extends utils.Adapter {
 			'error',
 			(event) => {
 				if (event.readyState == EventSource.CLOSED) {
-					this.log.error('Connection was closed! ' + event);
+					this.log.error('Connection was closed! ' + JSON.stringify(event));
 				} else {
-					this.log.error('An unknown error occurred: ' + event);
+					this.log.error('An unknown error occurred: ' + JSON.stringify(event));
 				}
 			},
 			false
