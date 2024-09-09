@@ -7,18 +7,6 @@
 
 adapter for NEST devices like NEST-thermostat, NEST-protect, NEST-camera
 
-## Installation:
-Installation requires nodejs v4 at minimum
-ioBroker admin v3 is needed
-
-from npm
-```javascript
-npm install iobroker.nest
-```
-actual version from github (this might not every time work, when development is in progress)
-```javascript
-npm install https://github.com/foxthefox/ioBroker.nest/tarball/master --production
-```
 
 ## Settings
 * set your access_token and save the adapter (not save and close)
